@@ -1,4 +1,5 @@
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.ss.usermodel.Cell;
@@ -10,12 +11,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.logging.log4j.core.util.Loader.getClassLoader;
+
 public class DiplomaGenerator {
 
     public static void main(String[] args) {
-        String excelPath = "C:\\Users\\joser\\OneDrive\\Documents\\MisCodigos\\DiplomaPDF\\ejemplo.xlsx";
-        String templatePath = "C:\\Users\\joser\\OneDrive\\Documents\\MisCodigos\\DiplomaPDF\\fotodiploma.jpg";
-        String outputPath = "C:\\Users\\joser\\OneDrive\\Documents\\MisCodigos\\DiplomaPDF\\generados";
+        String excelPath = "src/main/resources/assets/ejemplo.xlsx";
+        String templatePath = "src/main/resources/assets/fotodiploma.jpg";
+        String outputPath = "src/main/resources/assets/generados";
 
         List<String> names = readNamesFromExcel(excelPath);
 
@@ -59,8 +62,13 @@ public class DiplomaGenerator {
             document.add(img);
 
             // Define el nombre y la fuente.
-            Font font = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD);
-            Phrase phrase = new Phrase(name, font);
+            String fontPath = "src/main/resources/fonts/roboto/Roboto-Bold.ttf";
+            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+
+            Font robotoFont = new Font(baseFont, 24); // 24 es el tamaño de la fuente.
+
+            Phrase phrase = new Phrase(name, robotoFont);
 
             // Obtiene las coordenadas del centro de la página.
             float x = document.getPageSize().getWidth() / 2;
